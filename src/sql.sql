@@ -13,7 +13,7 @@ CREATE TABLE clients (
 CREATE TABLE projets (
     projet_id SERIAL PRIMARY KEY,
     nom_projet VARCHAR(255) NOT NULL,
-    marge_beneficiaire DECIMAL(5, 2) NOT NULL, -- Beneficiary margin applied to the total cost
+    marge_beneficiaire DECIMAL(5, 2)  NULL, 
     cout_total DECIMAL(10, 2) DEFAULT 0,
     etat_projet VARCHAR(20) CHECK (etat_projet IN ('EN_COURS', 'TERMINE', 'ANNULE')) NOT NULL,
     client_id INT,
@@ -42,7 +42,7 @@ CREATE TABLE gestion_des_composants (
     nom VARCHAR(255) NOT NULL,
     cout_unitaire DECIMAL(10, 2) NOT NULL,
     quantite DECIMAL(10, 2) NOT NULL,
-    type_composant VARCHAR(20) CHECK (type_composant IN ('MATERIEL', 'MAIN_D_OEUVRE')) NOT NULL,
+    type_composant VARCHAR(20) CHECK (type_composant IN ('Materiel', 'MainOeuvre')) NOT NULL,
     taux_tva DECIMAL(5, 2) NOT NULL,
     projet_id INT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -64,6 +64,7 @@ CREATE TABLE materiaux (
 -- Create MainOeuvre Table
 CREATE TABLE main_oeuvre (
     id SERIAL PRIMARY KEY,
+     type_mainoeuvre VARCHAR(255) NOT NULL,
     taux_horaire DECIMAL(10, 2), -- Only for labor components
     heures_travail DECIMAL(5, 2), -- Only for labor components
     productivite_ouvrier DECIMAL(5, 2),

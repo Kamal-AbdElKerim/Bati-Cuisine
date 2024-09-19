@@ -3,6 +3,8 @@ package Repository.DAO;
 import model.MainOeuvre;
 import java.sql.*;
 import java.util.HashMap;
+import java.util.Map;
+
 import Repository.Repository;
 
 public class MainOeuvreRepository implements Repository<MainOeuvre> {
@@ -55,12 +57,12 @@ public class MainOeuvreRepository implements Repository<MainOeuvre> {
     }
 
     @Override
-    public int save( MainOeuvre mainOeuvre) {
+    public int save(MainOeuvre mainOeuvre) {
         String sql = "INSERT INTO MainOeuvre (Id, taux_horaire, heures_travail, productivite_ouvrier, Composants_id) " +
-                     "VALUES (?, ?, ?, ?, ?) ON CONFLICT(Id) DO UPDATE SET " +
-                     "taux_horaire = EXCLUDED.taux_horaire, heures_travail = EXCLUDED.heures_travail, " +
-                     "productivite_ouvrier = EXCLUDED.productivite_ouvrier, Composants_id = EXCLUDED.Composants_id";
-        
+                "VALUES (?, ?, ?, ?, ?) ON CONFLICT(Id) DO UPDATE SET " +
+                "taux_horaire = EXCLUDED.taux_horaire, heures_travail = EXCLUDED.heures_travail, " +
+                "productivite_ouvrier = EXCLUDED.productivite_ouvrier, Composants_id = EXCLUDED.Composants_id";
+
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setDouble(2, mainOeuvre.getTauxHoraire());
             preparedStatement.setDouble(3, mainOeuvre.getHeuresTravail());
@@ -71,18 +73,60 @@ public class MainOeuvreRepository implements Repository<MainOeuvre> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 0 ;
+        return 0;
+    }
+
+    public void insertData(HashMap<String, MainOeuvre> mainOeuvreMap, int projetID) throws Exception {
+        String insertComposantQuery = "INSERT INTO gestion_des_composants (nom, cout_unitaire, quantite, type_composant, taux_tva, projet_id) "
+                +
+                "VALUES (?, ?, ?, ?, ?, ?) RETURNING composant_id";
+        String insertMainOeuvreQuery = "INSERT INTO main_oeuvre (type_mainoeuvre, taux_horaire, heures_travail, productivite_ouvrier, composants_id) "
+                +
+                "VALUES (?, ?, ?, ?, ?)";
+
+        for (Map.Entry<String, MainOeuvre> entry : mainOeuvreMap.entrySet()) {
+            MainOeuvre mainOeuvre = entry.getValue();
+
+            // 1. Insert into gestion_des_composants and retrieve composant_id
+            int composantId = -1;
+            try (PreparedStatement stmtComposant = connection.prepareStatement(insertComposantQuery)) {
+                stmtComposant.setString(1, mainOeuvre.getNom());
+                stmtComposant.setDouble(2, mainOeuvre.getCoutUnitaire());
+                stmtComposant.setDouble(3, mainOeuvre.getQuantite());
+                stmtComposant.setString(4, mainOeuvre.getTypeComposant().name());
+                stmtComposant.setDouble(5, mainOeuvre.getTauxTVA());
+                stmtComposant.setInt(6, projetID);
+
+                ResultSet rs = stmtComposant.executeQuery();
+                if (rs.next()) {
+                    composantId = rs.getInt("composant_id");
+                }
+            }
+
+            // 2. Insert into main_oeuvre using the retrieved composant_id
+            if (composantId != -1) {
+                try (PreparedStatement stmtMainOeuvre = connection.prepareStatement(insertMainOeuvreQuery)) {
+                    stmtMainOeuvre.setString(1, mainOeuvre.getMainOeuvreType());
+                    stmtMainOeuvre.setDouble(2, mainOeuvre.getTauxHoraire());
+                    stmtMainOeuvre.setDouble(3, mainOeuvre.getHeuresTravail());
+                    stmtMainOeuvre.setDouble(4, mainOeuvre.getProductiviteOuvrier());
+                    stmtMainOeuvre.setInt(5, composantId);
+
+                    stmtMainOeuvre.executeUpdate();
+                }
+            }
+        }
     }
 
     public MainOeuvre mapRow(ResultSet rs) throws SQLException {
         // Ensure this method correctly maps the ResultSet to a MainOeuvre object
         // return new MainOeuvre(
-        //     rs.getInt("Id"),
-        //     rs.getDouble("taux_horaire"),
-        //     rs.getBigDecimal("heures_travail"),
-        //     rs.getBigDecimal("productivite_ouvrier"),
-        //     rs.getInt("Composants_id")
+        // rs.getInt("Id"),
+        // rs.getDouble("taux_horaire"),
+        // rs.getBigDecimal("heures_travail"),
+        // rs.getBigDecimal("productivite_ouvrier"),
+        // rs.getInt("Composants_id")
         // );
-        return null ;
+        return null;
     }
 }

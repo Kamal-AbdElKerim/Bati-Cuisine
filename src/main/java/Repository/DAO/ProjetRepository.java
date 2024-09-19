@@ -60,21 +60,30 @@ public class ProjetRepository implements Repository<Project> {
     }
 
     @Override
-    public int save( Project projet) {
+    public int save(Project projet) {
+        int projetId = -1;
         try {
-            String query = "INSERT INTO Projet (Id, nomProjet, margeBeneficiaire, coutTotal, etatProjet, clientId) VALUES (?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO projets (nom_projet, marge_beneficiaire, cout_total, etat_projet, surface_cuisine, client_id) " +
+                           "VALUES (?, ?, ?, ?, ?, ?) RETURNING projet_id";
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(2, projet.getNomProjet());
-            statement.setDouble(3, projet.getMargeBeneficiaire());
-            statement.setDouble(4, projet.getCoutTotal());
-            statement.setString(5, projet.getEtatProjet().name());
+            statement.setString(1, projet.getNomProjet());
+            statement.setDouble(2, projet.getMargeBeneficiaire());
+            statement.setDouble(3, projet.getCoutTotal());
+            statement.setString(4, projet.getEtatProjet().name());
+            statement.setDouble(5, projet.getSurfaceCuisine());
             statement.setInt(6, projet.getClient().getClientID());
-            statement.executeUpdate();
+            
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                projetId = resultSet.getInt("projet_id");
+            }
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 0;
+        return projetId;
     }
+    
 
     @Override
     public Project mapRow(ResultSet rs) throws SQLException {

@@ -12,11 +12,13 @@ public class MenuPrincipal {
     private static Scanner scanner;
     private ClientRepository clientRepository;
     private Connection connection;
+    private MenuComposants menucomposants;
 
     public MenuPrincipal() {
         this.scanner = new Scanner(System.in);
         this.connection = DatabaseConnection.getInstance().getConnection();
         this.clientRepository = new ClientRepository(connection);
+        this.menucomposants = new MenuComposants(connection);
 
     }
 
@@ -92,6 +94,8 @@ public class MenuPrincipal {
             System.out.println("Client trouvé !");
             ClientTrouve(client.getNom(), client.getAdresse(), client.getTelephone());
 
+            createNewProject(client.getClientID());
+
         } else {
             System.out.println("Client non trouvé.");
             manageClient();
@@ -140,37 +144,24 @@ public class MenuPrincipal {
 
     }
 
-    private  void createNewProject(int idClient) {
-        
+    public void createNewProject(int idClient) {
+
         System.out.println("--- Création d'un Nouveau Projet ---");
         System.out.print("Entrez le nom du projet : ");
         String projectName = scanner.nextLine();
         System.out.print("Entrez la surface de la cuisine (en m²) : ");
         double surfaceArea = scanner.nextDouble();
-        scanner.nextLine(); 
+        scanner.nextLine();
 
-        Client client =  clientRepository.findById(idClient);
+        Client client = clientRepository.findById(idClient);
 
         System.out.println(client);
-        
 
-      
-
-        Project project = new Project(projectName, surfaceArea  , client );
+        Project project = new Project(projectName, surfaceArea, client);
         System.out.println(project);
 
-        System.out.println("--- Ajout des matériaux ---");
-        while (true) {
-            // addMaterialToProject(project);
-            System.out.print("Voulez-vous ajouter un autre matériau ? (oui/non) : ");
-            String moreMaterials = scanner.nextLine();
-            if (!moreMaterials.equalsIgnoreCase("oui")) {
-                break;
-            }
-        }
+        menucomposants.Materiau( project);
 
-        System.out.println("Projet créé avec succès !");
-  
     }
 
 }

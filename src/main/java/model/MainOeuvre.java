@@ -3,12 +3,14 @@ package model;
 public class MainOeuvre extends Composant {
     private int MainOeuvreID ;
     private double tauxHoraire;
+    private String mainOeuvreType ;
     private double heuresTravail;
     private double productiviteOuvrier;
 
-    public MainOeuvre(String nom, double tauxHoraire, double heuresTravail, double tauxTVA, double productiviteOuvrier) {
-        super(nom, tauxHoraire, heuresTravail, TypeComposant.MainOeuvre, tauxTVA);
+    public MainOeuvre(Double coutUnitaire,Double quantite,String nom, double tauxHoraire, double heuresTravail, String mainOeuvreType ,double tauxTVA, double productiviteOuvrier) {
+        super(nom, coutUnitaire, quantite, TypeComposant.MainOeuvre, tauxTVA);
         this.tauxHoraire = tauxHoraire;
+        this.mainOeuvreType = mainOeuvreType;
         this.heuresTravail = heuresTravail;
         this.productiviteOuvrier = productiviteOuvrier;
     }
@@ -24,6 +26,14 @@ public class MainOeuvre extends Composant {
 
     public void setMainOeuvreID(int mainOeuvreID) {
         MainOeuvreID = mainOeuvreID;
+    }
+
+    public String getMainOeuvreType() {
+        return mainOeuvreType;
+    }
+
+    public void setMainOeuvreType(String mainOeuvreType) {
+        this.mainOeuvreType = mainOeuvreType;
     }
 
     public double getTauxHoraire() {

@@ -4,6 +4,7 @@ package Repository.DAO;
 import model.Materiaux;
 import java.sql.*;
 import java.util.HashMap;
+import java.util.Map;
 
 import Repository.Repository;
 
@@ -75,6 +76,43 @@ public class MateriauxRepository implements Repository<Materiaux> {
         return 0;
     }
 
+    public void insertData(HashMap<String, Materiaux> materiauxMap , int projetID) throws Exception{
+        String insertComposantQuery = "INSERT INTO gestion_des_composants (nom, cout_unitaire, quantite, type_composant, taux_tva , projet_id) " +
+                                      "VALUES (?, ?, ?, ?, ?, ?) RETURNING composant_id";
+        String insertMateriauxQuery = "INSERT INTO materiaux (cout_transport, coefficient_qualite, composants_id) VALUES (?, ?, ?)";
+
+        for (Map.Entry<String, Materiaux> entry : materiauxMap.entrySet()) {
+            Materiaux materiau = entry.getValue();
+
+            // 1. Insert into gestion_des_composants and retrieve composant_id
+            int composantId = -1;
+            try (PreparedStatement stmtComposant = connection.prepareStatement(insertComposantQuery)) {
+                stmtComposant.setString(1, materiau.getNom());
+                stmtComposant.setDouble(2, materiau.getCoutUnitaire());
+                stmtComposant.setDouble(3, materiau.getQuantite());
+                stmtComposant.setString(4, materiau.getTypeComposant().name());
+                stmtComposant.setDouble(5, materiau.getTauxTVA());
+                stmtComposant.setInt(6, projetID);
+
+
+                ResultSet rs = stmtComposant.executeQuery();
+                if (rs.next()) {
+                    composantId = rs.getInt("composant_id");
+                }
+            }
+
+            // 2. Insert into materiaux using the retrieved composant_id
+            if (composantId != -1) {
+                try (PreparedStatement stmtMateriaux = connection.prepareStatement(insertMateriauxQuery)) {
+                    stmtMateriaux.setDouble(1, materiau.getCoutTransport());
+                    stmtMateriaux.setDouble(2, materiau.getCoefficientQualite());
+                    stmtMateriaux.setInt(3, composantId);
+
+                    stmtMateriaux.executeUpdate();
+                }
+            }
+        }
+    }
     @Override
     public Materiaux mapRow(ResultSet rs) throws SQLException {
         Materiaux materiel = new Materiaux();
