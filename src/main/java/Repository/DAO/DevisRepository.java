@@ -62,16 +62,14 @@ public class DevisRepository implements Repository<Devis> {
 
     @Override
     public int save( Devis devis) {
-        String sql = "INSERT INTO Devis (Id, MontantEstime, DateEmission, DateValidee, Accepte) " +
-                     "VALUES (?, ?, ?, ?, ?)" +
-                     "ON CONFLICT(Id) DO UPDATE SET MontantEstime = EXCLUDED.MontantEstime, " +
-                     "DateEmission = EXCLUDED.DateEmission, DateValidee = EXCLUDED.DateValidee, Accepte = EXCLUDED.Accepte";
+        String sql = "INSERT INTO devis ( montant_estime, date_emission, date_validite, accepte , projet_id) " +
+                     "VALUES (?, ?, ?, ?, ?)" ;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setDouble(2, devis.getMontantEstime());
-            preparedStatement.setDate(3, Date.valueOf(devis.getDateEmission()));
-            preparedStatement.setDate(4, devis.getDateValidite() != null ? Date.valueOf(devis.getDateValidite()) : null);
-            preparedStatement.setBoolean(5, devis.isAccepte());
+            preparedStatement.setDouble(1, devis.getMontantEstime());
+            preparedStatement.setDate(2, Date.valueOf(devis.getDateEmission()));
+            preparedStatement.setDate(3, devis.getDateValidite() != null ? Date.valueOf(devis.getDateValidite()) : null);
+            preparedStatement.setBoolean(4, devis.isAccepte());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

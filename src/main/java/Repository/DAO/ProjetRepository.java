@@ -1,6 +1,5 @@
 package Repository.DAO;
 
-
 import model.Project;
 import model.Client;
 import model.EtatProjet;
@@ -41,7 +40,7 @@ public class ProjetRepository implements Repository<Project> {
     @Override
     public Project findById(int id) {
         try {
-            String query = "SELECT * FROM Projet WHERE Id = ?";
+            String query = "SELECT * FROM projets WHERE projet_id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
@@ -63,8 +62,9 @@ public class ProjetRepository implements Repository<Project> {
     public int save(Project projet) {
         int projetId = -1;
         try {
-            String query = "INSERT INTO projets (nom_projet, marge_beneficiaire, cout_total, etat_projet, surface_cuisine, client_id) " +
-                           "VALUES (?, ?, ?, ?, ?, ?) RETURNING projet_id";
+            String query = "INSERT INTO projets (nom_projet, marge_beneficiaire, cout_total, etat_projet, surface_cuisine, client_id) "
+                    +
+                    "VALUES (?, ?, ?, ?, ?, ?) RETURNING projet_id";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, projet.getNomProjet());
             statement.setDouble(2, projet.getMargeBeneficiaire());
@@ -72,34 +72,55 @@ public class ProjetRepository implements Repository<Project> {
             statement.setString(4, projet.getEtatProjet().name());
             statement.setDouble(5, projet.getSurfaceCuisine());
             statement.setInt(6, projet.getClient().getClientID());
-            
+
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 projetId = resultSet.getInt("projet_id");
             }
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return projetId;
     }
-    
+
+    public boolean updateProject(Project projet , int projectId) {
+        String sql = "UPDATE projets SET  marge_beneficiaire = ?, cout_total = ?, etat_projet = ?, " +
+                " tva = ? WHERE project_id = ?";
+        try (
+                PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setDouble(1, projet.getMargeBeneficiaire());
+            pstmt.setDouble(2, projet.getCoutTotal());
+            pstmt.setString(3, projet.getEtatProjet().name());
+            pstmt.setDouble(4, projet.getTVA());
+            pstmt.setInt(5, projectId);
+
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     @Override
     public Project mapRow(ResultSet rs) throws SQLException {
-        String nomProjet = rs.getString("nomProjet");
-        double margeBeneficiaire = rs.getDouble("margeBeneficiaire");
-        double coutTotal = rs.getDouble("coutTotal");
-        EtatProjet etatProjet = EtatProjet.valueOf(rs.getString("etatProjet"));
-        int clientId = rs.getInt("clientId");
+        int idProjet = rs.getInt("projet_id");
+        String nomProjet = rs.getString("nom_projet");
+        double margeBeneficiaire = rs.getDouble("marge_beneficiaire");
+        double coutTotal = rs.getDouble("cout_total");
+        EtatProjet etatProjet = EtatProjet.valueOf(rs.getString("etat_projet"));
+        int clientId = rs.getInt("client_id");
+        double surfaceCuisine = rs.getDouble("surface_cuisine");
+        double TVA = rs.getDouble("TVA");
 
         // Fetching the client separately (assuming ClientRepository is implemented)
         Client client = new ClientRepository(connection).findById(clientId);
 
-        Project projet = new Project(nomProjet, margeBeneficiaire, client);
-        projet.setCoutTotal(coutTotal);
-        projet.setEtatProjet(etatProjet);
+        Project projet = new Project(idProjet, nomProjet, margeBeneficiaire, coutTotal, surfaceCuisine, TVA, client);
+
         return projet;
     }
 }
-

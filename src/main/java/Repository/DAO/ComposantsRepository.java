@@ -54,6 +54,8 @@ public class ComposantsRepository implements Repository<Composant> {
         return composant;
     }
 
+ 
+
     @Override
     public Composant findByName(String name) {
         return null;
@@ -84,17 +86,14 @@ public class ComposantsRepository implements Repository<Composant> {
     @Override
     public Composant mapRow(ResultSet rs) throws SQLException {
         
-        // Composant composant = new Composant();
-        // composant.setComposantID(rs.getInt("composant_id"));
-        // composant.setNom(rs.getString("nom"));
-        // composant.setCoutUnitaire(rs.getDouble("cout_unitaire"));
-        // composant.setQuantite(rs.getDouble("quantite"));
-        // composant.setTypeComposant(Composant.TypeComposant.valueOf(rs.getString("type_composant")));
-        // composant.setTauxTVA(rs.getDouble("taux_TVA"));
-    
-  
-    
-         return null;
+        // int composant_id = rs.getInt("composant_id");
+        // String nom = rs.getString("nom");
+        // double cout_unitaire = rs.getDouble("cout_unitaire");
+        // double quantite = rs.getDouble("quantite");
+        // String type_composant = rs.getString("type_composant");
+        // double taux_tva = rs.getDouble("taux_tva");
+        // int projet_id = rs.getInt("projet_id");
+        return null ;
     }
     
 }

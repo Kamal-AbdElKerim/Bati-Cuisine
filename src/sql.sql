@@ -18,6 +18,8 @@ CREATE TABLE projets (
     etat_projet VARCHAR(20) CHECK (etat_projet IN ('EN_COURS', 'TERMINE', 'ANNULE')) NOT NULL,
     client_id INT,
     surface_cuisine DECIMAL(5, 2) NOT NULL,
+    TVA DECIMAL(5, 2) NULL,
+
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (client_id) REFERENCES clients(client_id) ON DELETE CASCADE

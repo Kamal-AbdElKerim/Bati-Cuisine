@@ -8,17 +8,27 @@ public class Project {
     private double margeBeneficiaire;
     private double coutTotal;
     private double surfaceCuisine;
+    private double TVA;
     private EtatProjet etatProjet; 
 
     private Client client;
-    private HashMap<Integer,Composant> composants; 
+
+    public Project(int projetID ,String nomProjet, double margeBeneficiaire,double coutTotal,double surfaceCuisine,double TVA, Client client) {
+        this.projetID = projetID;
+        this.nomProjet = nomProjet;
+        this.margeBeneficiaire = margeBeneficiaire;
+        this.surfaceCuisine = surfaceCuisine;
+        this.client = client;
+        this.coutTotal = coutTotal;
+        this.TVA = TVA;
+        this.etatProjet = EtatProjet.EN_COURS; 
+    }
 
     public Project(String nomProjet, double margeBeneficiaire,double surfaceCuisine, Client client) {
         this.nomProjet = nomProjet;
         this.margeBeneficiaire = margeBeneficiaire;
         this.surfaceCuisine = surfaceCuisine;
         this.client = client;
-        this.composants = new HashMap<>();
         this.etatProjet = EtatProjet.EN_COURS; 
     }
 
@@ -27,6 +37,13 @@ public class Project {
         this.surfaceCuisine = surfaceCuisine;
         this.client = client;
         this.etatProjet = EtatProjet.EN_COURS; 
+    }
+
+    public Project( double margeBeneficiaire,  double coutTotal ,double TVA) {
+        this.margeBeneficiaire = margeBeneficiaire;
+        this.coutTotal = coutTotal;
+        this.TVA = TVA;
+        this.etatProjet = EtatProjet.TERMINE; 
     }
 
     public int getProjetID(){
@@ -67,6 +84,14 @@ public class Project {
         this.surfaceCuisine = surfaceCuisine;
     }
 
+    public double getTVA() {
+        return TVA;
+    }
+
+    public void setTVA(double TVA) {
+        this.TVA = TVA;
+    }
+
     public EtatProjet getEtatProjet() {
         return etatProjet;
     }
@@ -83,13 +108,7 @@ public class Project {
         this.client = client;
     }
 
-    public HashMap<Integer,Composant> getComposants() {
-        return composants;
-    }
 
-    public void setComposants(HashMap<Integer,Composant> composants) {
-        this.composants = composants;
-    }
 
     @Override
     public String toString() {
@@ -99,7 +118,6 @@ public class Project {
                 ", coutTotal=" + coutTotal +
                 ", etatProjet=" + etatProjet +
                 ", client=" + client +
-                ", composants=" + composants +
                 '}';
     }
 }

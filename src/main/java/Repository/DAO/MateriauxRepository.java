@@ -1,10 +1,10 @@
 package Repository.DAO;
 
 
-import model.Materiaux;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
+import model.*;
 
 import Repository.Repository;
 
@@ -51,6 +51,31 @@ public class MateriauxRepository implements Repository<Materiaux> {
 
         return materiel;
     }
+
+    public Map<Integer, Materiaux> findByProjectID(int id) {
+        String sql = "SELECT * FROM projets p "
+                   + "JOIN gestion_des_composants g ON p.projet_id = g.projet_id "
+                   + "JOIN materiaux m ON g.composant_id = m.composants_id "
+                   + "WHERE p.projet_id = ?";
+    
+        Map<Integer, Materiaux> materiauxMap = new HashMap<>();  // HashMap to store composant_id and Materiaux
+    
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+    
+            while (rs.next()) {
+                Materiaux materiaux = mapRow(rs);  // Map each row
+                int composantId = rs.getInt("composant_id");  // Use composant_id as key
+                materiauxMap.put(composantId, materiaux);  // Add to HashMap
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();  // Proper logging recommended in production
+        }
+    
+        return materiauxMap;  // Return HashMap of composant_id -> Materiaux
+    }
+    
 
     @Override
     public Materiaux findByName(String name) {
@@ -113,15 +138,36 @@ public class MateriauxRepository implements Repository<Materiaux> {
             }
         }
     }
-    @Override
-    public Materiaux mapRow(ResultSet rs) throws SQLException {
-        Materiaux materiel = new Materiaux();
-        materiel.setMateriauID(rs.getInt("Id"));
-        materiel.setCoutTransport(rs.getDouble("cout_transport"));
-        materiel.setCoefficientQualite(rs.getDouble("coefficient_qualite"));
-        materiel.setComposantID(rs.getInt("Composants_id"));
-        
-        return materiel;
-    }
+@Override
+public Materiaux mapRow(ResultSet rs) throws SQLException {
+    // Retrieve data for the Materiaux table
+    int idMateriaux = rs.getInt("id");
+    double coutTransport = rs.getDouble("cout_transport");
+    double coefficientQualite = rs.getDouble("coefficient_qualite");
+    int composantsId = rs.getInt("composants_id");
+
+    // Retrieve data for the GestionDesComposants table
+    int composantId = rs.getInt("composant_id");
+    String nomComposant = rs.getString("nom");
+    double coutUnitaire = rs.getDouble("cout_unitaire");
+    double quantite = rs.getDouble("quantite");
+    String typeComposant = rs.getString("type_composant");
+    double tauxTVA = rs.getDouble("taux_tva");
+
+    // Retrieve data for the Projets table
+    int projetId = rs.getInt("projet_id");
+    String nomProjet = rs.getString("nom_projet");
+    double margeBeneficiaire = rs.getDouble("marge_beneficiaire");
+    double coutTotal = rs.getDouble("cout_total");
+    String etatProjet = rs.getString("etat_projet");
+    int clientId = rs.getInt("client_id");
+    double surfaceCuisine = rs.getDouble("surface_cuisine");
+    double TVA = rs.getDouble("TVA");
+
+    Materiaux materiaux = new Materiaux(nomComposant ,coutUnitaire ,quantite ,tauxTVA , coutTransport , coefficientQualite);
+
+    return materiaux;
+}
+
 }
 

@@ -41,7 +41,7 @@ public class MenuPrincipal {
                     // displayProjects();
                     break;
                 case 3:
-                    // calculateProjectCost();
+                    calculateProjectCost();
                     break;
                 case 4:
                     System.out.println("Exiting the application. Goodbye!");
@@ -162,6 +162,10 @@ public class MenuPrincipal {
 
         menucomposants.Materiau( project);
 
+    }
+
+    private void calculateProjectCost(){
+        
     }
 
 }

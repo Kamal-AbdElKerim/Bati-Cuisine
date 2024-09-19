@@ -17,6 +17,16 @@ public abstract class Composant {
         this.tauxTVA = tauxTVA;
     }
 
+    public Composant(int ComposantID ,String nom, double coutUnitaire, double quantite, TypeComposant typeComposant, double tauxTVA) {
+        this.ComposantID = ComposantID;
+        this.nom = nom;
+        this.coutUnitaire = coutUnitaire;
+        this.quantite = quantite;
+        this.typeComposant = typeComposant;
+        this.tauxTVA = tauxTVA;
+       
+    }
+
     public Composant(){}
 
     public abstract double calculerCout();

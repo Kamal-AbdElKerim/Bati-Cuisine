@@ -15,6 +15,14 @@ public class MainOeuvre extends Composant {
         this.productiviteOuvrier = productiviteOuvrier;
     }
 
+    public MainOeuvre(String nom ,Double coutUnitaire,Double quantite, double tauxHoraire, double heuresTravail, String mainOeuvreType ,double tauxTVA, double productiviteOuvrier) {
+        super(nom, coutUnitaire, quantite, TypeComposant.MainOeuvre, tauxTVA);
+        this.tauxHoraire = tauxHoraire;
+        this.mainOeuvreType = mainOeuvreType;
+        this.heuresTravail = heuresTravail;
+        this.productiviteOuvrier = productiviteOuvrier;
+    }
+
     @Override
     public double calculerCout() {
         return (tauxHoraire * heuresTravail * productiviteOuvrier);

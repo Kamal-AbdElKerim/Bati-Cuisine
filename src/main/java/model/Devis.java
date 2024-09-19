@@ -9,11 +9,11 @@ public class Devis {
     private LocalDate dateValidite;
     private boolean accepte;
 
-    public Devis(double montantEstime, LocalDate dateEmission, LocalDate dateValidite) {
+    public Devis(double montantEstime, LocalDate dateEmission, LocalDate dateValidite , boolean accepte) {
         this.montantEstime = montantEstime;
         this.dateEmission = dateEmission;
         this.dateValidite = dateValidite;
-        this.accepte = false;
+        this.accepte = accepte;
     }
     public Devis(){}
 
