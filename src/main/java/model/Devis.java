@@ -8,12 +8,14 @@ public class Devis {
     private LocalDate dateEmission;
     private LocalDate dateValidite;
     private boolean accepte;
+    private Project project;
 
-    public Devis(double montantEstime, LocalDate dateEmission, LocalDate dateValidite , boolean accepte) {
+    public Devis(double montantEstime, LocalDate dateEmission, LocalDate dateValidite , boolean accepte , Project project) {
         this.montantEstime = montantEstime;
         this.dateEmission = dateEmission;
         this.dateValidite = dateValidite;
         this.accepte = accepte;
+        this.project =  project ;
     }
     public Devis(){}
 
@@ -21,9 +23,8 @@ public class Devis {
         this.accepte = true;
     }
 
-    public boolean isValide(LocalDate currentDate) {
-        return !currentDate.isAfter(dateValidite);
-    }
+  
+    
 
     public int getDevisID() {
         return DevisID;
@@ -39,6 +40,14 @@ public class Devis {
 
     public void setMontantEstime(double montantEstime) {
         this.montantEstime = montantEstime;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     public LocalDate getDateEmission() {

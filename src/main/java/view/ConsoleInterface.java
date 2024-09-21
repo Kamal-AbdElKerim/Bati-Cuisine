@@ -1,5 +1,5 @@
 package view;
-import  controller.*;
+import  Console.*;
 
 public class ConsoleInterface {
 

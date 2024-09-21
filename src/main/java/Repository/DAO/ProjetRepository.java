@@ -7,7 +7,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import Repository.Repository;
 import config.DatabaseConnection;
@@ -24,12 +26,12 @@ public class ProjetRepository implements Repository<Project> {
     public HashMap<Integer, Project> findAll() {
         HashMap<Integer, Project> projets = new HashMap<>();
         try {
-            String query = "SELECT * FROM Projet";
+            String query = "SELECT * FROM projets where etat_projet = 'TERMINE'";
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
                 Project projet = mapRow(rs);
-                projets.put(rs.getInt("Id"), projet);
+                projets.put(rs.getInt("projet_id"), projet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -40,7 +42,7 @@ public class ProjetRepository implements Repository<Project> {
     @Override
     public Project findById(int id) {
         try {
-            String query = "SELECT * FROM projets WHERE projet_id = ?";
+            String query = "SELECT * FROM projets WHERE projet_id = ? ";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
@@ -56,6 +58,21 @@ public class ProjetRepository implements Repository<Project> {
     @Override
     public Project findByName(String name) {
         return null;
+    }
+
+    public List<Project> selectProjectsNoCout() {
+        List<Project> projects = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM projets WHERE etat_projet = 'EN_COURS' AND cout_total = 0.00 ";
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                projects.add(mapRow(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return projects;
     }
 
     @Override
@@ -84,9 +101,9 @@ public class ProjetRepository implements Repository<Project> {
         return projetId;
     }
 
-    public boolean updateProject(Project projet , int projectId) {
+    public boolean updateProject(Project projet, int projectId) {
         String sql = "UPDATE projets SET  marge_beneficiaire = ?, cout_total = ?, etat_projet = ?, " +
-                " tva = ? WHERE project_id = ?";
+                " tva = ? WHERE projet_id = ?";
         try (
                 PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
@@ -121,6 +138,30 @@ public class ProjetRepository implements Repository<Project> {
 
         Project projet = new Project(idProjet, nomProjet, margeBeneficiaire, coutTotal, surfaceCuisine, TVA, client);
 
+      
+
+
         return projet;
+    }
+
+    public void displayProjectsInTable(List<Project> projects) {
+        // Print table header
+        System.out.printf("%-10s %-20s %-20s %-20s %-20s %-20s %-20s\n",
+                "ID", "Nom Projet", "Marge Beneficiaire", "Cout Total", "Surface Cuisine", "TVA", "Client");
+
+        System.out.println(
+                "--------------------------------------------------------------------------------------------------------------------------------");
+
+        // Print table rows
+        for (Project project : projects) {
+            System.out.printf("%-10d %-20s %-20.2f %-20.2f %-20.2f %-20.2f %-20s\n",
+                    project.getProjetID(),
+                    project.getNomProjet(),
+                    project.getMargeBeneficiaire(),
+                    project.getCoutTotal(),
+                    project.getSurfaceCuisine(),
+                    project.getTVA(),
+                    project.getClient().getNom());
+        }
     }
 }

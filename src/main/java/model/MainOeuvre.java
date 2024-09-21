@@ -6,6 +6,7 @@ public class MainOeuvre extends Composant {
     private String mainOeuvreType ;
     private double heuresTravail;
     private double productiviteOuvrier;
+    private Composant composant;
 
     public MainOeuvre(Double coutUnitaire,Double quantite,String nom, double tauxHoraire, double heuresTravail, String mainOeuvreType ,double tauxTVA, double productiviteOuvrier) {
         super(nom, coutUnitaire, quantite, TypeComposant.MainOeuvre, tauxTVA);

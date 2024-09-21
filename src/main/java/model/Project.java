@@ -10,7 +10,6 @@ public class Project {
     private double surfaceCuisine;
     private double TVA;
     private EtatProjet etatProjet; 
-
     private Client client;
 
     public Project(int projetID ,String nomProjet, double margeBeneficiaire,double coutTotal,double surfaceCuisine,double TVA, Client client) {

@@ -55,6 +55,25 @@ public class DevisRepository implements Repository<Devis> {
         return devis;
     }
 
+    public Devis findByProjectID(int id) {
+        String sql = "SELECT * FROM devis WHERE projet_id = ?";
+        Devis devis = null;
+    
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+    
+            if (rs.next()) {
+                devis = mapRow(rs);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error fetching devis by project ID from database.", e);
+        }
+    
+        return devis;
+    }
+    
+
     @Override
     public Devis findByName(String name) {
         return null;
@@ -70,6 +89,7 @@ public class DevisRepository implements Repository<Devis> {
             preparedStatement.setDate(2, Date.valueOf(devis.getDateEmission()));
             preparedStatement.setDate(3, devis.getDateValidite() != null ? Date.valueOf(devis.getDateValidite()) : null);
             preparedStatement.setBoolean(4, devis.isAccepte());
+            preparedStatement.setInt(5, devis.getProject().getProjetID());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -81,11 +101,11 @@ public class DevisRepository implements Repository<Devis> {
     @Override
     public Devis mapRow(ResultSet rs) throws SQLException {
         Devis devis = new Devis();
-        devis.setDevisID(rs.getInt("Id"));
-        devis.setMontantEstime(rs.getDouble("MontantEstime"));
-        devis.setDateEmission(rs.getDate("DateEmission").toLocalDate());
-        devis.isValide(rs.getDate("DateValidee") != null ? rs.getDate("DateValidee").toLocalDate() : null);
-        devis.setAccepte(rs.getBoolean("Accepte"));
+        devis.setDevisID(rs.getInt("devis_id"));
+        devis.setMontantEstime(rs.getDouble("montant_estime"));
+        devis.setDateEmission(rs.getDate("date_emission").toLocalDate());
+        devis.setDateValidite(rs.getDate("date_validite") != null ? rs.getDate("date_validite").toLocalDate() : null);
+        devis.setAccepte(rs.getBoolean("accepte"));
 
         return devis;
     }
