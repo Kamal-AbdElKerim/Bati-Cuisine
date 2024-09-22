@@ -1,11 +1,12 @@
 package service;
 
-import Repository.DAO.ProjetRepository;
 import model.Project;
 
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
+
+import Repository.RepositoryImpl.ProjetRepository;
 
 public class ProjectService {
     private ProjetRepository projetRepository;

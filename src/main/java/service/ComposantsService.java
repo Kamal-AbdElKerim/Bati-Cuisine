@@ -1,10 +1,11 @@
 package service;
 
-import Repository.DAO.ComposantsRepository;
 import model.Composant;
 
 import java.sql.Connection;
 import java.util.HashMap;
+
+import Repository.RepositoryImpl.ComposantsRepository;
 
 public class ComposantsService {
     private ComposantsRepository composantsRepository;

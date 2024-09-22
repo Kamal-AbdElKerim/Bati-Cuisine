@@ -1,4 +1,4 @@
-package Repository.DAO;
+package Repository.RepositoryImpl;
 
 
 import model.Devis;

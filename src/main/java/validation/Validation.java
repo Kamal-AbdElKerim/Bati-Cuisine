@@ -28,7 +28,7 @@ public class Validation {
         scanner.nextLine();
         while (true) {
             System.out.print("Entrez le nom du " + validName + ": ");
-            String name = scanner.nextLine().trim(); // This reads the input.
+            String name = scanner.nextLine().trim(); 
             if (!name.isEmpty()) {
                 return name;
             }
@@ -68,19 +68,18 @@ public class Validation {
     public double getValidSurfaceArea() {
         while (true) {
             System.out.print("Entrez la surface de la cuisine (en m²) : ");
-            String input = scanner.nextLine().trim(); // Read and trim the input
+            String input = scanner.nextLine().trim(); 
     
-            // Check if input is empty
+           
             if (input.isEmpty()) {
                 System.out.println("Surface area cannot be empty. Please try again.");
                 continue;
             }
     
-            // Check if input is a valid numeric value
             try {
                 double surfaceArea = Double.parseDouble(input);
                 if (surfaceArea > 0) {
-                    return surfaceArea; // Return if valid and positive
+                    return surfaceArea; 
                 } else {
                     System.out.println("Surface area must be positive. Please try again.");
                 }
@@ -112,9 +111,8 @@ public class Validation {
     public double getValidDoubleInput(String prompt) {
         while (true) {
             System.out.print(prompt);
-            String input = scanner.nextLine().trim(); // Read the input as a string and trim whitespace
+            String input = scanner.nextLine().trim(); 
     
-            // Check if the input is empty
             if (input.isEmpty()) {
                 System.out.println("L'entrée ne peut pas être vide. Veuillez réessayer.");
                 continue;
@@ -123,7 +121,7 @@ public class Validation {
             try {
                 double value = Double.parseDouble(input);
                 if (value >= 0) {
-                    return value; // Return the value if it's valid and positive
+                    return value; 
                 } else {
                     System.out.println("La valeur doit être un nombre positif. Veuillez réessayer.");
                 }
@@ -152,7 +150,6 @@ public class Validation {
             String inputDate = scanner.nextLine().trim();
 
             try {
-                // Try to parse the date
                 LocalDate date = LocalDate.parse(inputDate, DATE_FORMATTER);
                 return date;
             } catch (DateTimeParseException e) {

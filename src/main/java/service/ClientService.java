@@ -1,10 +1,11 @@
 package service;
 
-import Repository.DAO.ClientRepository;
 import model.Client;
 
 import java.sql.Connection;
 import java.util.HashMap;
+
+import Repository.RepositoryImpl.ClientRepository;
 
 public class ClientService {
     private ClientRepository clientRepository;

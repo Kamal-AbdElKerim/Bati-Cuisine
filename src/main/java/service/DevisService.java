@@ -1,10 +1,11 @@
 package service;
 
-import Repository.DAO.DevisRepository;
 import model.Devis;
 
 import java.sql.Connection;
 import java.util.HashMap;
+
+import Repository.RepositoryImpl.DevisRepository;
 
 public class DevisService {
     private DevisRepository devisRepository;

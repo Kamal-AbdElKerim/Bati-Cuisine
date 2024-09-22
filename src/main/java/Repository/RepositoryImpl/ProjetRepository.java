@@ -1,4 +1,4 @@
-package Repository.DAO;
+package Repository.RepositoryImpl;
 
 import model.Project;
 import model.Client;
@@ -133,26 +133,20 @@ public class ProjetRepository implements Repository<Project> {
         double surfaceCuisine = rs.getDouble("surface_cuisine");
         double TVA = rs.getDouble("TVA");
 
-        // Fetching the client separately (assuming ClientRepository is implemented)
         Client client = new ClientRepository(connection).findById(clientId);
 
         Project projet = new Project(idProjet, nomProjet, margeBeneficiaire, coutTotal, surfaceCuisine, TVA, client);
-
-      
-
 
         return projet;
     }
 
     public void displayProjectsInTable(List<Project> projects) {
-        // Print table header
         System.out.printf("%-10s %-20s %-20s %-20s %-20s %-20s %-20s\n",
                 "ID", "Nom Projet", "Marge Beneficiaire", "Cout Total", "Surface Cuisine", "TVA", "Client");
 
         System.out.println(
                 "--------------------------------------------------------------------------------------------------------------------------------");
 
-        // Print table rows
         for (Project project : projects) {
             System.out.printf("%-10d %-20s %-20.2f %-20.2f %-20.2f %-20.2f %-20s\n",
                     project.getProjetID(),

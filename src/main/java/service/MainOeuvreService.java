@@ -1,11 +1,12 @@
 package service;
 
-import Repository.DAO.MainOeuvreRepository;
 import model.MainOeuvre;
 
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
+
+import Repository.RepositoryImpl.MainOeuvreRepository;
 
 public class MainOeuvreService {
 

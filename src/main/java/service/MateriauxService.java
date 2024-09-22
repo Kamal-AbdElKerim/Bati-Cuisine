@@ -1,11 +1,12 @@
 package service;
 
-import Repository.DAO.MateriauxRepository;
 import model.Materiaux;
 
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
+
+import Repository.RepositoryImpl.MateriauxRepository;
 
 public class MateriauxService {
     private MateriauxRepository materiauxRepository;

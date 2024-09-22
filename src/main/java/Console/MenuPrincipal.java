@@ -20,13 +20,12 @@ public class MenuPrincipal {
     private static Scanner scanner;
     private Connection connection;
     private MenuComposants menucomposants;
-    private ProjectService projectService ;
-    private MateriauxService materiauxService ;
-    private MainOeuvreService mainOeuvreService ;
+    private ProjectService projectService;
+    private MateriauxService materiauxService;
+    private MainOeuvreService mainOeuvreService;
     private DevisService devisService;
-    private ClientService clientService ;
-    private Validation validation ;
-  
+    private ClientService clientService;
+    private Validation validation;
 
     public MenuPrincipal() {
         this.scanner = new Scanner(System.in);
@@ -37,7 +36,8 @@ public class MenuPrincipal {
         this.devisService = new DevisService(connection);
         this.clientService = new ClientService(connection);
         this.validation = new Validation();
-        this.menucomposants = new MenuComposants(connection , projectService , materiauxService , mainOeuvreService , devisService , validation);
+        this.menucomposants = new MenuComposants(connection, projectService, materiauxService, mainOeuvreService,
+                devisService, validation);
 
     }
 
@@ -71,8 +71,6 @@ public class MenuPrincipal {
         }
     }
 
-  
-
     private void manageClient() {
         System.out.println("--- Recherche de client ---");
         System.out.println("Souhaitez-vous chercher un client existant ou en ajouter un nouveau ?");
@@ -80,7 +78,7 @@ public class MenuPrincipal {
         System.out.println("2. Ajouter un nouveau client");
         System.out.print("Choisissez une option : ");
 
-        int clientChoice =validation.getChoice();
+        int clientChoice = validation.getChoice();
         switch (clientChoice) {
             case 1:
                 searchExistingClient();
@@ -90,14 +88,14 @@ public class MenuPrincipal {
                 break;
             default:
                 System.out.println("Choix invalide. Veuillez réessayer.");
-                manageClient(); // Recursively call until a valid choice is made
+                manageClient();
         }
     }
 
     private void searchExistingClient() {
-        
+
         System.out.println("--- Recherche de client existant ---");
-       
+
         String clientName = validation.getValidInput("client");
 
         Client client = clientService.getClientByName(clientName);
@@ -117,7 +115,7 @@ public class MenuPrincipal {
 
     private void addNewClient() {
         System.out.println("--- Ajout d'un nouveau client ---");
-        
+
         String clientName = validation.getValidInput("client");
         String address = validation.getValidAddress();
         String phone = validation.getValidPhoneNumber();
@@ -156,7 +154,7 @@ public class MenuPrincipal {
     public void createNewProject(int idClient) {
 
         System.out.println("--- Création d'un Nouveau Projet ---");
-        
+
         String projectName = validation.getValidInput("projet");
         double surfaceArea = validation.getValidSurfaceArea();
 
@@ -170,16 +168,16 @@ public class MenuPrincipal {
 
     private void displayProjects() {
         HashMap<Integer, Project> projects = projectService.getAllProjects();
-    
-        // Print table header for project details
+
         System.out.printf(" %-20s %-20s %-20s %-20s %-20s %-20s %-20s %-20s\n",
-                "Nom Projet", "Marge Beneficiaire", "Cout Total", "Surface Cuisine", "TVA", "Client" , "Telephone de Client" , "address de Client");
-    
-        System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-    
-        // Loop through all projects
+                "Nom Projet", "Marge Beneficiaire", "Cout Total", "Surface Cuisine", "TVA", "Client",
+                "Telephone de Client", "address de Client");
+
+        System.out.println(
+                "------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
         for (Project project : projects.values()) {
-            System.out.printf(" %-20s %-20.2f %-20.2f %-20.2f %-20.2f %-20s %-20s %-20s\n",
+            System.out.printf(" %-20s %-20.2f %-20.2f %-20.2f %-20.2f %-20s %-20s %-10s\n",
                     project.getNomProjet(),
                     project.getMargeBeneficiaire(),
                     project.getCoutTotal(),
@@ -188,15 +186,15 @@ public class MenuPrincipal {
                     project.getClient().getNom(),
                     project.getClient().getTelephone(),
                     project.getClient().getAdresse()
-                    
-                    );
-    
-            // Fetch and display related Devis
+
+            );
+
+            // Fetch and display Devis
             Devis devis = devisService.getDevisByProjectID(project.getProjetID());
             if (devis != null) {
                 System.out.println("\n  Devis:");
                 System.out.printf("   -  Montant Estimé: %.2f, Date d'Émission: %s, Date Validite: %s, Accepté: %b\n",
-                       
+
                         devis.getMontantEstime(),
                         devis.getDateEmission(),
                         devis.getDateValidite() != null ? devis.getDateValidite() : "N/A",
@@ -204,13 +202,14 @@ public class MenuPrincipal {
             } else {
                 System.out.println("  Devis: Aucun devis disponible.");
             }
-    
-            // Fetch and display related Materiaux
+
+            // Fetch and display Materiaux
             Map<Integer, Materiaux> materiaux = materiauxService.getMateriauxByProjectId(project.getProjetID());
             System.out.println("  Materiaux:");
             for (Materiaux mat : materiaux.values()) {
-                System.out.printf("   -  Nom: %s, Cout Unitaire: %.2f, Quantite: %.2f, Type: %s, Cout Transport: %.2f, Coefficient Qualite: %.2f\n",
-                      
+                System.out.printf(
+                        "   -  Nom: %s, Cout Unitaire: %.2f, Quantite: %.2f, Type: %s, Cout Transport: %.2f, Coefficient Qualite: %.2f\n",
+
                         mat.getNom(),
                         mat.getCoutUnitaire(),
                         mat.getQuantite(),
@@ -218,13 +217,14 @@ public class MenuPrincipal {
                         mat.getCoutTransport(),
                         mat.getCoefficientQualite());
             }
-    
-            // Fetch and display related MainOeuvre
+
+            // Fetch and display MainOeuvre
             Map<Integer, MainOeuvre> mainOeuvre = mainOeuvreService.getMainOeuvreByProjectId(project.getProjetID());
             System.out.println("  Main Oeuvre:");
             for (MainOeuvre mo : mainOeuvre.values()) {
-                System.out.printf("   -  Nom: %s, Cout Unitaire: %.2f, Quantite: %.2f, Type: %s, Type Main Oeuvre: %s, Taux Horaire: %.2f, Heures Travail: %.2f, Productivite: %.2f\n",
-                       
+                System.out.printf(
+                        "   -  Nom: %s, Cout Unitaire: %.2f, Quantite: %.2f, Type: %s, Type Main Oeuvre: %s, Taux Horaire: %.2f, Heures Travail: %.2f, Productivite: %.2f\n",
+
                         mo.getNom(),
                         mo.getCoutUnitaire(),
                         mo.getQuantite(),
@@ -234,21 +234,26 @@ public class MenuPrincipal {
                         mo.getHeuresTravail(),
                         mo.getProductiviteOuvrier());
             }
-    
-            System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+            System.out.println(
+                    "------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
         }
     }
-    
+
     private void calculateProjectCost() {
 
         List<Project> projects = projectService.getProjectsNoCout();
 
-        projectService.displayProjectsInTable(projects);
+        if (projects.size() > 0) {
+            projectService.displayProjectsInTable(projects);
 
-        System.out.print("Entrez l'ID du projet pour calculer son coût : ");
-        int projectId = validation.getValidProjectId();
+            System.out.print("Entrez l'ID du projet pour calculer son coût : ");
+            int projectId = validation.getValidProjectId();
 
-        menucomposants.coutTotal(projectId);
+            menucomposants.coutTotal(projectId);
+        } else {
+            System.out.println("Aucun projet disponible.");
+        }
 
     }
 
