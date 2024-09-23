@@ -1,5 +1,4 @@
-import config.DatabaseConnection;
-import view.*;
+import view.ConsoleInterface;
 public class BatiCuisine {
     public static void main(String[] args) {
         

@@ -41,6 +41,7 @@ public class MenuPrincipal {
 
     }
 
+    
     public void MenuProjet() {
         while (true) {
             System.out.println("=== Bienvenue dans l'application de gestion des projets de rénovation de cuisines ===");
@@ -181,7 +182,7 @@ public class MenuPrincipal {
                 "------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
         for (Project project : projects.values()) {
-            System.out.printf(" %-20s %-20.2f %-20.2f %-20.2f %-20.2f %-20s %-20s %-10s\n",
+            System.out.printf(" %-20s %-20.2f %-20.2f %-20.2f %-20.2f %-20s %-20s %-20s\n",
                     project.getNomProjet(),
                     project.getMargeBeneficiaire(),
                     project.getCoutTotal(),

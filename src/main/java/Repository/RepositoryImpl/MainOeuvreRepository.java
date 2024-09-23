@@ -144,30 +144,26 @@ public class MainOeuvreRepository implements Repository<MainOeuvre> {
 
     public MainOeuvre mapRow(ResultSet rs) throws SQLException {
     // Retrieve data for the mainOeuvre table
-    int idMateriaux = rs.getInt("id");
     String mainOeuvreType = rs.getString("type_mainoeuvre");
     double tauxHoraire = rs.getDouble("taux_horaire");
     double heuresTravail = rs.getDouble("heures_travail");
     double productiviteOuvrier = rs.getDouble("productivite_ouvrier");
-    int composants_id = rs.getInt("composants_id");
 
     // Retrieve data for the GestionDesComposants table
-    int composantId = rs.getInt("composant_id");
     String nomComposant = rs.getString("nom");
     double coutUnitaire = rs.getDouble("cout_unitaire");
     double quantite = rs.getDouble("quantite");
-    String typeComposant = rs.getString("type_composant");
     double tauxTVA = rs.getDouble("taux_tva");
 
-    // Retrieve data for the Projets table
-    int projetId = rs.getInt("projet_id");
-    String nomProjet = rs.getString("nom_projet");
-    double margeBeneficiaire = rs.getDouble("marge_beneficiaire");
-    double coutTotal = rs.getDouble("cout_total");
-    String etatProjet = rs.getString("etat_projet");
-    int clientId = rs.getInt("client_id");
-    double surfaceCuisine = rs.getDouble("surface_cuisine");
-    double TVA = rs.getDouble("TVA");
+    // // Retrieve data for the Projets table
+    // int projetId = rs.getInt("projet_id");
+    // String nomProjet = rs.getString("nom_projet");
+    // double margeBeneficiaire = rs.getDouble("marge_beneficiaire");
+    // double coutTotal = rs.getDouble("cout_total");
+    // String etatProjet = rs.getString("etat_projet");
+    // int clientId = rs.getInt("client_id");
+    // double surfaceCuisine = rs.getDouble("surface_cuisine");
+    // double TVA = rs.getDouble("TVA");
 
     MainOeuvre mainOeuvre = new MainOeuvre(nomComposant ,coutUnitaire ,quantite ,tauxHoraire , heuresTravail , mainOeuvreType , tauxTVA , productiviteOuvrier);
 

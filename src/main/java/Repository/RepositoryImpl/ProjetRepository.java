@@ -128,7 +128,7 @@ public class ProjetRepository implements Repository<Project> {
         String nomProjet = rs.getString("nom_projet");
         double margeBeneficiaire = rs.getDouble("marge_beneficiaire");
         double coutTotal = rs.getDouble("cout_total");
-        EtatProjet etatProjet = EtatProjet.valueOf(rs.getString("etat_projet"));
+        // EtatProjet etatProjet = EtatProjet.valueOf(rs.getString("etat_projet"));
         int clientId = rs.getInt("client_id");
         double surfaceCuisine = rs.getDouble("surface_cuisine");
         double TVA = rs.getDouble("TVA");
