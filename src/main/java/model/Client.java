@@ -16,6 +16,21 @@ public class Client {
 
     public Client(){}
 
+    public double calculerRemise(double montantProjet) {
+        double remise = 0.0;
+    
+        if (estProfessionnel) {
+            // Professional clients get a 10% discount
+            remise = montantProjet * 0.10;
+        } else {
+            // Regular clients get no discount
+            remise = 0.0;
+        }
+    
+        return remise;
+    }
+    
+
     public int getClientID() {
         return ClientID;
     }

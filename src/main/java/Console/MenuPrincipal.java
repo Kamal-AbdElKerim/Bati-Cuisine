@@ -96,13 +96,13 @@ public class MenuPrincipal {
 
         System.out.println("--- Recherche de client existant ---");
 
-        String clientName = validation.getValidInput("client");
+        String clientName = validation.getValidclient();
 
         Client client = clientService.getClientByName(clientName);
 
         if (client != null) {
             System.out.println("Client trouvé !");
-            ClientTrouve(client.getNom(), client.getAdresse(), client.getTelephone());
+            ClientTrouve(client.getNom(), client.getAdresse(), client.getTelephone() , client.isEstProfessionnel());
 
             createNewProject(client.getClientID());
 
@@ -115,14 +115,17 @@ public class MenuPrincipal {
 
     private void addNewClient() {
         System.out.println("--- Ajout d'un nouveau client ---");
-
-        String clientName = validation.getValidInput("client");
+        
+        String clientName = validation.getValidclient();
+        
         String address = validation.getValidAddress();
         String phone = validation.getValidPhoneNumber();
 
-        ClientTrouve(clientName, address, phone);
+        boolean isEstProfessionnel = validation.isEstProfessionnel();
 
-        Client client = new Client(clientName, address, phone, false);
+        ClientTrouve(clientName, address, phone , isEstProfessionnel);
+
+        Client client = new Client(clientName, address, phone, isEstProfessionnel);
 
         int idClient = clientService.saveClient(client);
 
@@ -132,11 +135,12 @@ public class MenuPrincipal {
 
     }
 
-    public void ClientTrouve(String clientName, String address, String phone) {
+    public void ClientTrouve(String clientName, String address, String phone , boolean isEstProfessionnel) {
 
-        System.out.println("Nom : " + clientName);
+        System.out.println("\nNom : " + clientName);
         System.out.println("Adresse : " + address);
         System.out.println("Numéro de téléphone : " + phone);
+        System.out.println("is Est Professionnel : " + (isEstProfessionnel ? "oui \n" : "non \n" ));
 
         System.out.print("Souhaitez-vous continuer avec ce client ? (y/n) : ");
         String proceed = scanner.nextLine();

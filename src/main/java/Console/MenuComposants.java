@@ -50,8 +50,6 @@ public class MenuComposants {
 
             double tauxTVA = validation.getValidDoubleInput("Souhaitez-vous appliquer une TVA (en %) : ");
 
-            scanner.nextLine();
-
             Materiaux materiaux = new Materiaux(materialName, materialUnitCost, materialQuantity, tauxTVA,
                     materialTransportCost, materialQualityCoefficient);
             materiauxs.put(materialName, materiaux);
@@ -70,7 +68,6 @@ public class MenuComposants {
                     .getValidDoubleInput("Entrez la quantité de ce MainOeuvre (en m²) : ");
             double MainOeuvreUnitCost = validation
                     .getValidDoubleInput("Entrez le coût unitaire de ce MainOeuvre ($/m²) : ");
-            scanner.nextLine();
 
             String MainOeuvreType = validation
                     .getValidStringInput("Entrez le type de main-d'oeuvre (e.g., Ouvrier de base, Spécialiste) : ");
@@ -80,7 +77,6 @@ public class MenuComposants {
             double MainOeuvreProductivityFactor = validation.getValidDoubleInput(
                     "Entrez le facteur de productivité (1.0 = standard, > 1.0 = haute productivité) : ");
             double tauxTVA = validation.getValidDoubleInput("Souhaitez-vous appliquer une TVA : ");
-            scanner.nextLine();
 
             MainOeuvre mainOeuvre = new MainOeuvre(MainOeuvreUnitCost, MainOeuvreQuantity, MainOeuvreName, tauxHoraire,
                     heuresTravail, MainOeuvreType, tauxTVA, MainOeuvreProductivityFactor);
@@ -121,7 +117,7 @@ public class MenuComposants {
         double TVAPercentage = 0.0;
         if (applyVAT) {
             TVAPercentage = validation.getValidDoubleInput("Entrez le pourcentage de TVA (%) : ");
-            scanner.nextLine();
+
         }
 
         System.out.print("Souhaitez-vous appliquer une marge bénéficiaire au projet ? (y/n) : ");
@@ -129,7 +125,7 @@ public class MenuComposants {
         double marginPercentage = 0.0;
         if (applyMargin) {
             marginPercentage = validation.getValidDoubleInput("Entrez le pourcentage de marge bénéficiaire (%) : ");
-            scanner.nextLine();
+
         }
 
         System.out.println("Calcul du coût en cours...");
@@ -207,7 +203,23 @@ public class MenuComposants {
         double coutTotalFinal = totalAvantMarge + margeBeneficiaire;
 
         System.out.printf("\n4. Marge bénéficiaire (%.0f%%) : %.2f $\n", marginPercentage, margeBeneficiaire);
-        System.out.printf("\n**Coût total final du projet : %.2f $**\n", coutTotalFinal);
+
+        Project project = projectService.getProjectById(projetID);
+
+        if (project.getClient().isEstProfessionnel()) {
+            System.out.printf("\n**Coût total du projet : %.2f $**\n", coutTotalFinal);
+            System.out.printf("\nRemise pour client professionnel (10%%) : %.2f $\n", 
+            project.getClient().calculerRemise(coutTotalFinal));
+            
+            // Apply the discount
+            coutTotalFinal = coutTotalFinal - project.getClient().calculerRemise(coutTotalFinal);
+            System.out.printf("\n**Coût total final du projet : %.2f $**\n", coutTotalFinal);
+        
+        } else {
+            // No discount for regular clients
+            System.out.printf("\n**Coût total final du projet : %.2f $**\n", coutTotalFinal);
+        }
+        
 
         EnregistrerDevis(projetID, margeBeneficiaire, coutTotalFinal, tva);
     }
@@ -244,7 +256,7 @@ public class MenuComposants {
                 System.out.printf("Date de validité : %s\n", devis.getDateValidite());
 
                 System.out.println("acceptez-vous ou refusez-vous un devis ? (y/n) :");
-                String accepterRefuser = scanner.nextLine();
+                String accepterRefuser = scanner.next();
                 if (accepterRefuser.equalsIgnoreCase("y")) {
                     devis = new Devis(coutTotalFinal, dateEmission, dateValidite, true, projectByID);
                     devisService.saveDevis(devis);

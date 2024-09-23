@@ -25,14 +25,30 @@ public class Validation {
     }
 
     public String getValidInput(String validName) {
-        scanner.nextLine();
+     
         while (true) {
             System.out.print("Entrez le nom du " + validName + ": ");
+          
             String name = scanner.nextLine().trim(); 
             if (!name.isEmpty()) {
                 return name;
             }
             System.out.println(validName + " cannot be empty. Please try again.");
+        }
+    }
+
+    public String getValidclient() {
+        if (scanner.hasNextLine()) {
+            scanner.nextLine(); 
+        }
+        while (true) {
+            System.out.print("Entrez le nom du client : ");
+          
+            String name = scanner.nextLine().trim(); 
+            if (!name.isEmpty()) {
+                return name;
+            }
+            System.out.println("client cannot be empty. Please try again.");
         }
     }
     
@@ -64,6 +80,26 @@ public class Validation {
         Pattern pattern = Pattern.compile(phoneRegex);
         return pattern.matcher(phoneNumber).matches();
     }
+
+    public boolean isEstProfessionnel() {
+        String response;
+    
+        do {
+            System.out.println("Le client est-il un professionnel ? (oui/non): ");
+            response = scanner.nextLine().trim().toLowerCase();
+            
+            if (response.equals("oui")) {
+                return true;
+            } else if (response.equals("non")) {
+                return false;
+            } else {
+                System.out.println("Veuillez entrer 'oui' ou 'non'.");
+            }
+        } while (!response.equals("oui") && !response.equals("non"));
+    
+        return false; 
+    }
+    
 
     public double getValidSurfaceArea() {
         while (true) {
