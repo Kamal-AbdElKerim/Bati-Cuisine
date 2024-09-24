@@ -2,7 +2,6 @@ package service;
 
 import model.Materiaux;
 
-import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,8 +10,8 @@ import Repository.RepositoryImpl.MateriauxRepository;
 public class MateriauxService {
     private MateriauxRepository materiauxRepository;
 
-    public MateriauxService(Connection connection) {
-        this.materiauxRepository = new MateriauxRepository(connection);
+    public MateriauxService(MateriauxRepository materiauxRepository) {
+        this.materiauxRepository = materiauxRepository;
     }
 
     public HashMap<Integer, Materiaux> getAllMateriaux() {

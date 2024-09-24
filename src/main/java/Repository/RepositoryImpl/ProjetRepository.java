@@ -2,7 +2,6 @@ package Repository.RepositoryImpl;
 
 import model.Project;
 import model.Client;
-import model.EtatProjet;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,14 +11,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import Repository.Repository;
-import config.DatabaseConnection;
 
 public class ProjetRepository implements Repository<Project> {
 
     private Connection connection;
 
     public ProjetRepository(Connection connection) {
-        this.connection = DatabaseConnection.getInstance().getConnection();
+        this.connection = connection;
     }
 
     @Override

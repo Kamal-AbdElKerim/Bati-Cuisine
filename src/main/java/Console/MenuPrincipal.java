@@ -6,6 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import Repository.RepositoryImpl.ClientRepository;
+import Repository.RepositoryImpl.DevisRepository;
+import Repository.RepositoryImpl.MainOeuvreRepository;
+import Repository.RepositoryImpl.MateriauxRepository;
+import Repository.RepositoryImpl.ProjetRepository;
 import model.*;
 import service.ClientService;
 import service.DevisService;
@@ -26,15 +31,25 @@ public class MenuPrincipal {
     private DevisService devisService;
     private ClientService clientService;
     private Validation validation;
+    private ClientRepository clientRepository;
+    private DevisRepository devisRepository;
+    private MainOeuvreRepository mainOeuvreRepository;
+    private MateriauxRepository materiauxRepository;
+    private ProjetRepository projetRepository;
 
     public MenuPrincipal() {
         this.scanner = new Scanner(System.in);
         this.connection = DatabaseConnection.getInstance().getConnection();
-        this.projectService = new ProjectService(connection);
-        this.materiauxService = new MateriauxService(connection);
-        this.mainOeuvreService = new MainOeuvreService(connection);
-        this.devisService = new DevisService(connection);
-        this.clientService = new ClientService(connection);
+        this.clientRepository = new ClientRepository(connection);
+        this.devisRepository = new DevisRepository(connection);
+        this.materiauxRepository = new MateriauxRepository(connection);
+        this.mainOeuvreRepository = new MainOeuvreRepository(connection);
+        this.projetRepository =  new ProjetRepository(connection);
+        this.projectService = new ProjectService(projetRepository);
+        this.materiauxService = new MateriauxService(materiauxRepository);
+        this.mainOeuvreService = new MainOeuvreService(mainOeuvreRepository);
+        this.devisService = new DevisService(devisRepository);
+        this.clientService = new ClientService( clientRepository);
         this.validation = new Validation();
         this.menucomposants = new MenuComposants(connection, projectService, materiauxService, mainOeuvreService,
                 devisService, validation);

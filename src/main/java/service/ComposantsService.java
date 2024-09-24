@@ -2,7 +2,6 @@ package service;
 
 import model.Composant;
 
-import java.sql.Connection;
 import java.util.HashMap;
 
 import Repository.RepositoryImpl.ComposantsRepository;
@@ -10,8 +9,8 @@ import Repository.RepositoryImpl.ComposantsRepository;
 public class ComposantsService {
     private ComposantsRepository composantsRepository;
 
-    public ComposantsService(Connection connection) {
-        this.composantsRepository = new ComposantsRepository(connection);
+    public ComposantsService(ComposantsRepository composantsRepository) {
+        this.composantsRepository = composantsRepository;
     }
 
     public HashMap<Integer, Composant> getAllComposants() {

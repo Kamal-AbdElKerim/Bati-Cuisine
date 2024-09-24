@@ -2,7 +2,6 @@ package service;
 
 import model.Devis;
 
-import java.sql.Connection;
 import java.util.HashMap;
 
 import Repository.RepositoryImpl.DevisRepository;
@@ -10,8 +9,8 @@ import Repository.RepositoryImpl.DevisRepository;
 public class DevisService {
     private DevisRepository devisRepository;
 
-    public DevisService( Connection connection) {
-        this.devisRepository = new DevisRepository(connection);
+    public DevisService(DevisRepository devisRepository) {
+        this.devisRepository = devisRepository;
     }
 
     public HashMap<Integer, Devis> getAllDevis() {

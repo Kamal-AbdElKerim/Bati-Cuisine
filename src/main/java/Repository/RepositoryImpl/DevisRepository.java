@@ -4,19 +4,16 @@ package Repository.RepositoryImpl;
 import model.Devis;
 import java.sql.*;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 import Repository.Repository;
-import config.DatabaseConnection;
 
 public class DevisRepository implements Repository<Devis> {
 
     private Connection connection;
-    private static final Logger logger = Logger.getLogger(DevisRepository.class.getName());
 
     public DevisRepository(Connection connection) {
-       this.connection = DatabaseConnection.getInstance().getConnection();
+       this.connection = connection;
     }
 
     @Override
@@ -30,7 +27,6 @@ public class DevisRepository implements Repository<Devis> {
                 devisList.put(devis.getDevisID(), devis);
             }
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error fetching all devis from database.", e);
         }
 
         return devisList;
@@ -49,7 +45,6 @@ public class DevisRepository implements Repository<Devis> {
                 devis = mapRow(rs);
             }
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error fetching devis by id from database.", e);
         }
 
         return devis;
@@ -67,7 +62,6 @@ public class DevisRepository implements Repository<Devis> {
                 devis = mapRow(rs);
             }
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error fetching devis by project ID from database.", e);
         }
     
         return devis;
@@ -93,7 +87,6 @@ public class DevisRepository implements Repository<Devis> {
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error saving devis to database.", e);
         }
         return 0 ;
     }

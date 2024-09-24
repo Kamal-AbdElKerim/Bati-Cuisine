@@ -2,7 +2,6 @@ package service;
 
 import model.MainOeuvre;
 
-import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,8 +11,8 @@ public class MainOeuvreService {
 
     private MainOeuvreRepository mainOeuvreRepository;
 
-    public MainOeuvreService(Connection connection) {
-        this.mainOeuvreRepository = new MainOeuvreRepository(connection);
+    public MainOeuvreService(MainOeuvreRepository mainOeuvreRepository) {
+        this.mainOeuvreRepository = mainOeuvreRepository;
     }
 
     // Service to fetch all MainOeuvre entries

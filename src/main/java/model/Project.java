@@ -1,6 +1,5 @@
 package model;
 
-import java.util.HashMap;
 
 public class Project {
     private int projetID ;

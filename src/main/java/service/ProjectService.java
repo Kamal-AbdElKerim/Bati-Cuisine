@@ -2,7 +2,6 @@ package service;
 
 import model.Project;
 
-import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,8 +10,8 @@ import Repository.RepositoryImpl.ProjetRepository;
 public class ProjectService {
     private ProjetRepository projetRepository;
 
-    public ProjectService(Connection connection) {
-        this.projetRepository =  new ProjetRepository(connection);
+    public ProjectService(ProjetRepository projetRepository) {
+        this.projetRepository =  projetRepository;
     }
 
     public HashMap<Integer, Project> getAllProjects() {

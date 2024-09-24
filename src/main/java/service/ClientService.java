@@ -2,7 +2,6 @@ package service;
 
 import model.Client;
 
-import java.sql.Connection;
 import java.util.HashMap;
 
 import Repository.RepositoryImpl.ClientRepository;
@@ -10,8 +9,8 @@ import Repository.RepositoryImpl.ClientRepository;
 public class ClientService {
     private ClientRepository clientRepository;
 
-    public ClientService(Connection connection) {
-        this.clientRepository = new ClientRepository(connection);
+    public ClientService(ClientRepository clientRepository ) {
+        this.clientRepository = clientRepository;
     }
 
     public HashMap<Integer, Client> getAllClients() {

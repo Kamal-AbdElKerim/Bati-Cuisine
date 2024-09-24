@@ -4,7 +4,6 @@ public class Materiaux extends Composant {
     private int MateriauID;
     private double coutTransport;
     private double coefficientQualite;
-    private Composant composant;
 
     public Materiaux(String nom, double coutUnitaire, double quantite, double tauxTVA, double coutTransport,double coefficientQualite) {
         super(nom, coutUnitaire, quantite, TypeComposant.Materiel, tauxTVA);
