@@ -18,6 +18,7 @@ public class MenuComposants {
     private MateriauxService materiauxService;
     private MainOeuvreService mainOeuvreService;
     private DevisService devisService;
+    private RemiseService remiseService;
 
     public MenuComposants(Connection connection, ProjectService projectService, MateriauxService materiauxService,
             MainOeuvreService mainOeuvreService, DevisService devisService, Validation validation) {
@@ -27,6 +28,7 @@ public class MenuComposants {
         this.mainOeuvreService = mainOeuvreService;
         this.devisService = devisService;
         this.validation = validation;
+        this.remiseService = new RemiseService();
 
     }
 
@@ -208,24 +210,23 @@ public class MenuComposants {
 
         if (project.getClient().isEstProfessionnel()) {
             System.out.printf("\n**Coût total du projet : %.2f $**\n", coutTotalFinal);
-            System.out.printf("\nRemise pour client professionnel (10%%) : %.2f $\n", 
-            project.getClient().calculerRemise(coutTotalFinal));
-            
-            // Apply the discount
-            coutTotalFinal = coutTotalFinal - project.getClient().calculerRemise(coutTotalFinal);
+
+            double remise = remiseService.calculerRemise(project.getClient(), coutTotalFinal);
+
+            System.out.printf("\nRemise pour client professionnel (10%%) : %.2f $\n", remise);
+
+            coutTotalFinal -= remise;
             System.out.printf("\n**Coût total final du projet : %.2f $**\n", coutTotalFinal);
-        
+
         } else {
-            // No discount for regular clients
             System.out.printf("\n**Coût total final du projet : %.2f $**\n", coutTotalFinal);
         }
-        
 
         EnregistrerDevis(projetID, margeBeneficiaire, coutTotalFinal, tva);
     }
 
     public void EnregistrerDevis(int projetID, double margeBeneficiaire, double coutTotalFinal, double tva) {
-        System.out.println("--- Enregistrement du Devis ---");
+        System.out.println("\n--- Enregistrement du Devis ---\n");
 
         // Validation des dates
         LocalDate dateEmission = validation.getValidDate("Entrez la date d'émission du devis (format : jj/mm/aaaa) : ");
